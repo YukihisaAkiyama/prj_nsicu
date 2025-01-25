@@ -25,6 +25,9 @@
 			<li aria-current={page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
 				<a href="/sverdle">Sverdle</a>
 			</li>
+			<li aria-current={page.url.pathname.startsWith('/vitalchart') ? 'page' : undefined}>
+				<a href="/vitalchart">温度版(NSICU)</a>
+			</li>
 		</ul>
 		<svg viewBox="0 0 2 3" aria-hidden="true">
 			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
@@ -106,7 +109,7 @@
 		top: 0;
 		left: calc(50% - var(--size));
 		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--color-theme-1);
+		border-top: var(--size) solid #4db5ff;
 	}
 
 	nav a {
@@ -124,6 +127,6 @@
 	}
 
 	a:hover {
-		color: var(--color-theme-1);
+		color: #4db5ff;
 	}
 </style>

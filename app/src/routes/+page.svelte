@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Counter from './Counter.svelte';
 	import welcome from '$lib/images/svelte-welcome.webp';
+	import NSICU from '$lib/images/logo-next-stage-icu.png';
 	import welcomeFallback from '$lib/images/svelte-welcome.png';
 </script>
 
@@ -9,18 +10,18 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<section>
-	<h1>
+<section class="">
+	<img src={NSICU} alt="Welcome" />
+
+	<h1 class="hidden text-center">
 		<span class="welcome">
 			<picture>
 				<source srcset={welcome} type="image/webp" />
 				<img src={welcomeFallback} alt="Welcome" />
 			</picture>
 		</span>
-
-		to your new<br />SvelteKit app
+		SvelteKit app
 	</h1>
-
 	<h2>
 		try editing <strong>src/routes/+page.svelte</strong>
 	</h2>
@@ -34,7 +35,7 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		flex: 0.6;
+		flex: 1;
 	}
 
 	h1 {
