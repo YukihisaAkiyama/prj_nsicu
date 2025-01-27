@@ -34,7 +34,7 @@
 		systolic: '#050', // 緑
 		diastolic: '#080', // 緑
 		pulse: '#f00', //
-		spo2: '#666' // 黒（反転の場合は白）
+		spo2: '#888' // 黒（反転の場合は白）
 	};
 
 	let chartContainer: HTMLDivElement;
@@ -146,65 +146,22 @@
 			.y((d) => y3(d.spo2));
 
 		// X軸
-		// X軸の目盛りを1日ごとに設定
-		// X軸の目盛り設定
-
-		const xAxisTicksHourly = x.ticks(d3.timeHour); // 1時間ごとの目盛り
-		const xAxisTicksDaily = x.ticks(d3.timeDay); // 1日ごとの目盛り
-		const xAxisFormatHourly = d3.timeFormat('%H:%M'); // 時:分表示
-		const xAxisFormatDaily = d3.timeFormat('%m/%d'); // 月/日表示
-
-		// ズームレベルに応じて目盛りの間隔を変更する関数
-		function updateXAxisTicks(scale: any) {
-			const domain = scale.domain();
-			const hours = (domain[1].getTime() - domain[0].getTime()) / (1000 * 60 * 60);
-
-			if (hours <= 24) {
-				// 表示期間が24時間以内の場合
-				return d3
-					.axisBottom(scale)
-					.tickValues(xAxisTicksHourly)
-					.tickFormat((d: any) => xAxisFormatHourly(d));
-			} else {
-				return d3
-					.axisBottom(scale)
-					.tickValues(xAxisTicksDaily)
-					.tickFormat((d: any) => xAxisFormatDaily(d));
-			}
-		}
-		const xAxisTicks = x.ticks(d3.timeDay);
-		const xAxisFormat = d3.timeFormat('%m/%d');
-		// X軸グリッドライン
-		const xAxisGrid = svg
-			.append('g')
-			.attr('class', 'grid')
-			.attr('transform', `translate(0,${height})`)
-			.call(
-				d3
-					.axisBottom(x)
-					.tickSize(-height)
-					.tickFormat(() => '')
-			)
-			.call((g) => g.select('.domain').remove())
-			.attr('opacity', 0.1);
 		const xAxis = svg
 			.append('g')
 			.attr('transform', `translate(0,${height})`)
 			.call(d3.axisBottom(x));
 
-		// y軸グリッドライン：HR:BP(y2)に付ける事で解決する
+		// Y軸:体温 (℃)
 		svg
 			.append('g')
-			.attr('class', 'grid')
-			.attr('transform', `translate(${0},0)`)
-			.call(
-				d3
-					.axisLeft(y2)
-					.tickSize(-width)
-					.tickFormat(() => '')
-			)
-			.call((g) => g.select('.domain').remove())
-			.attr('opacity', 0.1);
+			.attr('transform', `translate(${-80},0)`)
+			.call(d3.axisLeft(y1))
+			.attr('color', colors.temperature)
+			.append('text')
+			.attr('fill', colors.temperature)
+			.attr('y', -10)
+			.text('BT');
+
 		// Y軸：血圧 (mmHg) / 脈拍 (bpm)
 		svg
 			.append('g')
@@ -214,35 +171,22 @@
 			.append('text')
 			.attr('fill', colors.diastolic)
 			.attr('y', -10)
-			.text('HR/BP');
+			.text('HR / BP');
 
 		// Y軸：SpO2 (%)
-
 		svg
 			.append('g')
-			.attr('transform', `translate(${-60},0)`)
+			.attr('transform', `translate(${-40},0)`)
 			.call(d3.axisLeft(y3))
 			.attr('color', colors.spo2)
 			.append('text')
 			.attr('fill', colors.spo2)
 			.attr('y', -10)
 			.text('SpO2');
-
-		// Y軸:体温 (℃)
-		svg
-			.append('g')
-			.attr('transform', `translate(${-110},0)`)
-			.call(d3.axisLeft(y1))
-			.attr('color', colors.temperature)
-			.append('text')
-			.attr('fill', colors.temperature)
-			.attr('y', -10)
-			.text('BT');
-
 		// Y軸（右：脈拍）
 		svg
 			.append('g')
-			.attr('transform', `translate(${-170},0)`)
+			.attr('transform', `translate(${-130},0)`)
 			.call(d3.axisLeft(y2))
 			.attr('color', colors.pulse)
 			.append('text')
@@ -282,9 +226,7 @@
 			.selectAll('.bp-point')
 			.data(data)
 			.enter()
-			.append('path')
-			.attr('d', d3.symbol().type(d3.symbolTriangle2).size(50))
-			.attr('transform', (d) => `translate(${x(d.timestamp)},${y2(d.systolic)}) rotate(180)`)
+			.append('circle')
 			.attr('class', 'bp-point')
 			.attr('cx', (d) => x(d.timestamp))
 			.attr('cy', (d) => y2(d.systolic))
@@ -309,25 +251,12 @@
 			.selectAll('.dbp-point')
 			.data(data)
 			.enter()
-			.append('path')
-			.attr('d', d3.symbol().type(d3.symbolTriangle2).size(50))
-			.attr('transform', (d) => `translate(${x(d.timestamp)},${y2(d.diastolic)})`)
+			.append('circle')
 			.attr('class', 'dbp-point')
-			.attr('fill', colors.diastolic)
-			.on('mouseover', (event, d) => {
-				tooltip
-					.style('visibility', 'visible')
-					.html(
-						`時刻: ${formatTime(d.timestamp)}<br>収縮期血圧高: ${Math.round(
-							d.systolic
-						)}mmHg<br>拡張期血圧: ${Math.round(d.diastolic)}mmHg`
-					)
-					.style('left', `${event.pageX + 10}px`)
-					.style('top', `${event.pageY - 10}px`);
-			})
-			.on('mouseout', () => {
-				tooltip.style('visibility', 'hidden');
-			});
+			.attr('cx', (d) => x(d.timestamp))
+			.attr('cy', (d) => y2(d.diastolic))
+			.attr('r', 3)
+			.attr('fill', colors.diastolic);
 
 		// 脈拍のポイント
 		points
@@ -415,7 +344,6 @@
 			.attr('d', spo2Line);
 
 		// 凡例
-		/*
 		const legend = svg
 			.append('g')
 			.attr('font-family', 'sans-serif')
@@ -440,7 +368,7 @@
 			.attr('y', 9.5)
 			.attr('dy', '0.32em')
 			.text((d) => d);
-			*/
+
 		// ズーム機能を適用
 		svg.call(zoom as any);
 
@@ -451,20 +379,9 @@
 			// X軸の更新
 			xAxis.call(d3.axisBottom(newX));
 
-			// グリッドラインの更新
-			xAxisGrid
-				.call(
-					d3
-						.axisBottom(newX)
-						.tickSize(-height)
-						.tickFormat(() => '')
-				)
-				.call((g) => g.select('.domain').remove());
-
 			// ラインの更新
 			chartGroup.selectAll('path').attr('d', function (this: any) {
 				const line = d3.select(this);
-				line.attr('fill', 'none');
 				if (line.attr('stroke') === colors.temperature)
 					return tempLine.x((d: any) => newX(d.timestamp))(data);
 				if (line.attr('stroke') === colors.systolic)

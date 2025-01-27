@@ -26,7 +26,10 @@
 				<a href="/sverdle">Sverdle</a>
 			</li>
 			<li aria-current={page.url.pathname.startsWith('/vitalchart') ? 'page' : undefined}>
-				<a href="/vitalchart">温度版(NSICU)</a>
+				<a href="/vitalchart">温度版</a>
+			</li>
+			<li aria-current={page.url.pathname.startsWith('/Treemap') ? 'page' : undefined}>
+				<a href="/treetemp">Treemap</a>
 			</li>
 		</ul>
 		<svg viewBox="0 0 2 3" aria-hidden="true">

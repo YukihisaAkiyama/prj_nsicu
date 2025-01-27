@@ -1,16 +1,21 @@
 <script lang="ts">
 	import ChartVital from './chart_vital.svelte';
 	import EventList from './event_list.svelte';
+	import Test1 from './test1.svelte';
+	import Test2 from './test2.svelte';
 </script>
 
 <div class="workbase">
 	<div class="head"></div>
 	<div class="main bg-orange-100">
-		<div class="chart h-[30%] overflow-auto">
+		<div class="chart h-[300px] overflow-auto">
 			<ChartVital />
 		</div>
-		<div class="event h-[70%] overflow-x-auto overflow-y-auto">
+		<div class="event h-[300px] overflow-auto">
 			<EventList />
+		</div>
+		<div class="test1 h-[300px] overflow-auto">
+			<Test2 />
 		</div>
 	</div>
 	<div class="footer">footer</div>

@@ -24,7 +24,7 @@
 	];
 </script>
 
-<div class="overflow-x-auto">
+<div class="">
 	{#each categories as category, categoryIndex}
 		<table class="mb-2 w-full border-collapse border border-gray-300">
 			<tbody>
