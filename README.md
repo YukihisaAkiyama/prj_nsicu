@@ -10,6 +10,8 @@ NEXT Stage ICU Extension Project
 
 [Workdir] >cd prj_nsicu/app
 
+[app] >npm install
+
 [app] >npm run dev -- --open
 
 ```
