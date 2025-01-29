@@ -24,6 +24,12 @@
 	];
 </script>
 
+<button
+	class="button absolute right-1 m-8 rounded-md border border-e-2 px-4 py-2 text-white shadow-md"
+>
+	button
+</button>
+
 <div class="">
 	{#each categories as category, categoryIndex}
 		<table class="mb-2 w-full border-collapse border border-gray-300">
@@ -53,5 +59,9 @@
 		width: 60px;
 		min-width: 60px;
 		max-width: 60px;
+	}
+
+	.button {
+		@apply bg-gradient-to-br from-violet-800 via-pink-700 to-orange-700;
 	}
 </style>

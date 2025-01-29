@@ -34,7 +34,7 @@
 		systolic: '#050', // 緑
 		diastolic: '#080', // 緑
 		pulse: '#f00', //
-		spo2: '#666' // 黒（反転の場合は白）
+		spo2: '#08f' // 黒（反転の場合は白）
 	};
 
 	let chartContainer: HTMLDivElement;
@@ -89,12 +89,12 @@
 
 		const y2 = d3
 			.scaleLinear() // 血圧用
-			.domain([40, 160])
+			.domain([40, 200])
 			.range([height, 0]);
 
 		const y3 = d3
 			.scaleLinear() // SpO2用
-			.domain([90, 100])
+			.domain([70, 100])
 			.range([height, 0]);
 
 		// ズーム機能の追加
